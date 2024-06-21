@@ -69,6 +69,7 @@ export default function Page() {
                     </span>
                   </div>
                 </div>
+
                 <div>
                   <div className="flex items-center gap-2 flex-row lg:justify-center md:justify-center justify-start   mt-40 lg:mt-0 md:mt-0">
                     <Paintbrush className="h-12 w-12 text-[#f1b7f1]" />
@@ -91,6 +92,7 @@ export default function Page() {
                     </Link>
                   </div>
                 </div>
+
                 <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
                   <svg
                     className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
@@ -118,6 +120,7 @@ export default function Page() {
                     </defs>
                   </svg>
                 </div>
+
                 <div className="fixed inset-x-0 bottom-0">
                   <div className="bg-transparent">
                     <div className="mx-auto max-w-7xl py-3 px-3 sm:px-6 lg:px-8">

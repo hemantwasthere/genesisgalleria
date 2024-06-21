@@ -11,6 +11,7 @@
   "dependencies": {
     "@dynamic-labs/ethereum": "^2.2.3",
     "@dynamic-labs/sdk-react-core": "^2.2.3",
+    "@radix-ui/react-dialog": "^1.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.395.0",
