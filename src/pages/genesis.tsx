@@ -22,24 +22,6 @@ export default function Page() {
         </h1>
         <div className="flex flex-col mt-2">
           <PromptForm />
-
-          <div className="mb-2 mt-1 flex sm:justify-center">
-            <div className="relative overflow-hidden mt-2 rounded-full py-1.5 px-4 text-sm leading-6 border-1 border-gray-300 bg-gradient-to-r from-gray-50 to-gray-100 bg-opacity-50 ring-1 focus:border-none focus:ring-gray-900/20 focus:outline-none ring-gray-900/10 hover:ring-[#f1b7f1] cursor-pointer mx-auto">
-              <Link
-                href="https://www.howtogeek.com/833169/how-to-write-an-awesome-stable-diffusion-prompt/"
-                target="_blank"
-                rel="noreferrer"
-                className="flex text-xs sm:text-sm items-center justify-center gap-2 text-gray-500"
-              >
-                <Lightbulb className="sm:h-5 h-3 sm:w-5 w-3" />
-                <span
-                  className="absolute inset-0 hidden lg:absolute md:absolute"
-                  aria-hidden="true"
-                />
-                How to write good prompts
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
 
