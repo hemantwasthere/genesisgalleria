@@ -14,7 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <DynamicContextProvider
       settings={{
-        environmentId: "9f1b28fe-df65-4ea8-a7f9-990379c8bbb1",
+        environmentId: process.env.NEXT_PUBLIC_ENVIRONMENT_ID!,
         walletConnectors: [EthereumWalletConnectors],
         cssOverrides: cssOverrides,
       }}
