@@ -1,12 +1,13 @@
-import { cn } from "@/lib/utils";
 import { Paintbrush } from "lucide-react";
 import { Recursive } from "next/font/google";
 import Head from "next/head";
 import Link from "next/link";
 
+import { cn } from "@/lib/utils";
+
 const font = Recursive({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Page() {
   return (
     <>
       <Head>
@@ -47,7 +48,7 @@ export default function Home() {
         </div>
 
         <main>
-          <div className="relative px-6  lg:px-8">
+          <div className="relative px-6 lg:px-8">
             <div className="relative mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
               <div>
                 <div className="hidden mb-2 sm:flex sm:justify-center">
@@ -83,7 +84,7 @@ export default function Home() {
                   </p>
 
                   <div className="mt-8 flex gap-x-4 sm:justify-center">
-                    <Link href="/magic">
+                    <Link href="/genesis">
                       <p className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-gray-900/10 hover:ring-[#f1b7f1]">
                         Enter Dapp &rarr;
                       </p>
