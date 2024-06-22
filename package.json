@@ -11,6 +11,7 @@
   "dependencies": {
     "@dynamic-labs/ethereum": "^2.2.3",
     "@dynamic-labs/sdk-react-core": "^2.2.3",
+    "@dynamic-labs/starknet": "^2.2.4",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "axios": "^1.7.2",
