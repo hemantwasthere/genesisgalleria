@@ -4,7 +4,7 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <div>
-      <div className="fixed inset-x-0 bottom-0 pb-2 sm:pb-3">
+      <div className="fixed inset-x-0 bottom-2 sm:bottom-3">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="rounded-lg bg-gray-50 bg-opacity-10 p-2 shadow-lg sm:p-3 text-gray-500 ring-1 ring-gray-900/10 hover:ring-[#f1b7f1]">
             <div className="flex flex-wrap items-center justify-between">

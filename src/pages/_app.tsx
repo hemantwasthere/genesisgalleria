@@ -17,6 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
         environmentId: process.env.NEXT_PUBLIC_ENVIRONMENT_ID!,
         walletConnectors: [StarknetWalletConnectors],
         cssOverrides: cssOverrides,
+        enableConnectOnlyFallback: true,
       }}
     >
       <Component {...pageProps} />

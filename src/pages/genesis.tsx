@@ -14,7 +14,7 @@ export default function Page() {
 
       <Header />
 
-      <div className="flex flex-col justify-center items-center p-2 mt-28 lg:mt-52">
+      <div className="flex flex-col justify-center items-center h-[calc(100vh-40px)]">
         <h1 className="text-3xl md:text-6xl lg:text-7xl lg:mt-0 p-4 font-bold text-gray-800 text-center">
           What&apos;s on your mind?
         </h1>
@@ -23,12 +23,10 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="pt-[2px] p-2">
-        <div className="border-hairline max-w-[512px]  lg:p-0 mx-auto relative rounded-3xl">
-          <div className="bg-transparent max-h-[512px] lg:max-h-[512px] md:max-h-[512px] w-full flex flex-col items-stretch rounded-lg border-gray-600">
-            <div className="hidden lg:flex md:flex">
-              <Footer />
-            </div>
+      <div className="max-w-[512px] mx-auto relative rounded-3xl">
+        <div className="bg-transparent max-h-[512px] lg:max-h-[512px] md:max-h-[512px] w-full flex flex-col items-stretch rounded-lg border-gray-600">
+          <div className="hidden lg:flex md:flex">
+            <Footer />
           </div>
         </div>
       </div>
