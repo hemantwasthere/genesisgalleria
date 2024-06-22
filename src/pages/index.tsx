@@ -55,7 +55,7 @@ export default function Page() {
                   <div className="relative overflow-hidden mt-20 rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-[#f1b7f1]">
                     <span className="text-gray-600 ">
                       <a
-                        href="https://rohanphw.notion.site/rohanphw/Tangent-AI-978ec36ea968484a9c5556808ac604e8"
+                        href="https://sahii.notion.site/Genesis-Galleria-66804f0f612d4fac96269aebd8768a55"
                         target="_blank"
                         rel="noreferrer"
                         className="font-semibold"
