@@ -12,6 +12,7 @@ import {
   DialogDescription,
   DialogHeader,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 import { getRandomPrompt } from "../utils/index";
 import { Button } from "./ui/button";
 
@@ -20,6 +21,7 @@ export default function PromptForm({}: any) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ipfsHash, setIpfsHash] = useState("");
+  const [isMinting, setIsMinting] = useState(false);
   const [generatedImageUrl, setGeneratedImageUrl] = useState(
     // ""
     // "https://shorturl.at/Dvlqm"
@@ -59,6 +61,8 @@ export default function PromptForm({}: any) {
 
   async function uploadByURL(url: string) {
     try {
+      setIsMinting(true);
+
       const blob = new Blob([generatedImageUrl], {
         type: "text/plain",
       });
@@ -82,9 +86,11 @@ export default function PromptForm({}: any) {
       );
       const uploadRes = await upload.json();
       setIpfsHash(uploadRes.IpfsHash);
+      setIsMinting(false);
       console.log(uploadRes, "uploadRes");
     } catch (error) {
       console.log(error);
+      setIsMinting(false);
     }
   }
 
@@ -107,10 +113,10 @@ export default function PromptForm({}: any) {
           Generate
         </button>
 
-        {/* <Dialog
+        <Dialog
           open={isModalOpen}
           onOpenChange={(isOpen) => {
-            !isGenerating && setIsModalOpen(isOpen);
+            !isGenerating && !isMinting && setIsModalOpen(isOpen);
           }}
         >
           <DialogContent hideCloseIcon className={font.className}>
@@ -137,7 +143,10 @@ export default function PromptForm({}: any) {
                         <Button
                           variant="ghost"
                           onClick={() => setIsModalOpen(false)}
-                          className="w-full "
+                          className={cn("w-full", {
+                            "opacity-50 cursor-not-allowed": isMinting,
+                          })}
+                          disabled={isMinting}
                         >
                           Continue
                         </Button>
@@ -145,9 +154,22 @@ export default function PromptForm({}: any) {
                           onClick={async () => {
                             generatedImageUrl && uploadByURL(generatedImageUrl);
                           }}
-                          className="w-full bg-gradient-to-tr from-[#e79de7] to-[#f28df2] text-black hover:to-[#ee77ee]"
+                          className={cn(
+                            "w-full bg-gradient-to-tr from-[#e79de7] to-[#f28df2] text-black hover:to-[#ee77ee]",
+                            {
+                              "opacity-50 cursor-not-allowed": isMinting,
+                            }
+                          )}
+                          disabled={isMinting}
                         >
-                          Mint NFT
+                          {isMinting ? (
+                            <>
+                              <Loader className="animate-spin my-4 h-4 w-4" />
+                              <span className="ml-2">Minting...</span>
+                            </>
+                          ) : (
+                            "Mint NFT"
+                          )}
                         </Button>
                       </div>
                     </div>
@@ -156,9 +178,9 @@ export default function PromptForm({}: any) {
               </DialogDescription>
             </DialogHeader>
           </DialogContent>
-        </Dialog> */}
+        </Dialog>
 
-        <Dialog open={true}>
+        {/* <Dialog open={true}>
           <DialogContent hideCloseIcon className={font.className}>
             <DialogHeader>
               <DialogDescription className="flex justify-center items-center">
@@ -193,7 +215,7 @@ export default function PromptForm({}: any) {
               </DialogDescription>
             </DialogHeader>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </div>
 
       <div className="mb-2 mt-1 flex sm:justify-center">
