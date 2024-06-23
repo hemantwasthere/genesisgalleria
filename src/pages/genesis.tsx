@@ -15,7 +15,7 @@ export default function Page() {
       <Header />
 
       <div className="flex flex-col justify-center items-center h-[calc(100vh-40px)]">
-        <h1 className="text-3xl md:text-6xl lg:text-7xl lg:mt-0 p-4 font-bold text-gray-800 text-center">
+        <h1 className="text-3xl md:text-6xl lg:text-7xl lg:mt-0 p-4 font-bold text-gray-800 text-center select-none">
           What&apos;s on your mind?
         </h1>
         <div className="flex flex-col mt-2">

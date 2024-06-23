@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 const font = Recursive({ subsets: ["latin"] });
 
+import { getAllGenesis, getGenesis } from "@/blockchain/scripts/history";
+import useMintNft from "@/blockchain/scripts/mintNft";
 import {
   Dialog,
   DialogContent,
@@ -13,12 +15,10 @@ import {
   DialogHeader,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { useDynamicContext, useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
+import { useAccount } from "@starknet-react/core";
 import { getRandomPrompt } from "../utils/index";
 import { Button } from "./ui/button";
-import { getAllGenesis, getGenesis } from "@/blockchain/scripts/history";
-import useMintNft from "@/blockchain/scripts/mintNft";
-import { useDynamicContext, useIsLoggedIn, } from "@dynamic-labs/sdk-react-core";
-import { useAccount } from "@starknet-react/core";
 
 export default function PromptForm({}: any) {
   const [prompt, setPrompt] = useState("");
@@ -43,17 +43,17 @@ export default function PromptForm({}: any) {
     isErrorMint,
     isIdleMint,
     isSuccessMint,
-    statusMint
-  }=useMintNft()
+    statusMint,
+  } = useMintNft();
 
-  const handleMint=async()=>{
-    try{
-      const data=await getGenesis();
-      console.log(data,"data")
-    }catch(err){
-      console.log(err,'err in trnasaction')
+  const handleMint = async () => {
+    try {
+      const data = await getGenesis();
+      console.log(data, "data");
+    } catch (err) {
+      console.log(err, "err in trnasaction");
     }
-  }
+  };
   const { primaryWallet } = useDynamicContext();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -111,10 +111,10 @@ export default function PromptForm({}: any) {
         }
       );
       const uploadRes = await upload.json();
-      if(uploadRes?.IpfsHash){
+      if (uploadRes?.IpfsHash) {
         setIpfsHash(uploadRes?.IpfsHash);
-        seturi(uploadRes?.IpfsHash)
-        handleMint()
+        seturi(uploadRes?.IpfsHash);
+        handleMint();
       }
       setIsMinting(false);
       console.log(uploadRes, "uploadRes");
@@ -124,13 +124,13 @@ export default function PromptForm({}: any) {
     }
   }
 
-  useEffect(()=>{
-    const fetchData=async()=>{
-      const res=await getAllGenesis();
-      console.log(res,"values for all genesis")
-    }
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getAllGenesis();
+      console.log(res, "values for all genesis");
+    };
     fetchData();
-  },[])
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} className="animate-in fade-in duration-700">
@@ -152,7 +152,7 @@ export default function PromptForm({}: any) {
         </button>
 
         <Dialog
-          open={true}
+          open={isModalOpen}
           onOpenChange={(isOpen) => {
             !isGenerating && !isMinting && setIsModalOpen(isOpen);
           }}
@@ -182,7 +182,7 @@ export default function PromptForm({}: any) {
                           variant="ghost"
                           onClick={() => {
                             // setIsModalOpen(false)
-                            handleMint()
+                            handleMint();
                           }}
                           className={cn("w-full", {
                             "opacity-50 cursor-not-allowed": isMinting,
