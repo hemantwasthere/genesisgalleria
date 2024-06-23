@@ -97,6 +97,14 @@ mod GenesisGalleria {
         uri: felt252,
     }
 
+    #[derive(Drop, Serde, starknet::Store)]
+    pub struct Genesis {
+        genesis_id: u256,
+        minter: ContractAddress,
+        timestamp: u64,
+        uri: felt252,
+    }
+
     #[storage]
     struct Storage {
         #[substorage(v0)]
@@ -110,11 +118,13 @@ mod GenesisGalleria {
         admin: ContractAddress,
         character_id: u256,
         generation_id: u256,
+        genesis_id: u256,
         chartacter_id_to_character: LegacyMap::<u256, Character>,
         user_characters: LegacyMap::<(ContractAddress, u256), u256>,
         user_character_length: LegacyMap::<ContractAddress, u256>,
         generation_id_to_generation: LegacyMap::<u256, Generation>,
-        character_to_generations: LegacyMap::<(u256, u256), u256>, 
+        genesis_id_to_genesis: LegacyMap::<u256, Genesis>,
+        character_to_generations: LegacyMap::<(u256, u256), u256>,
         character_generation_length: LegacyMap::<u256, u256>,
     }
 
@@ -211,6 +221,7 @@ mod GenesisGalleria {
         }
 
         fn publish_generation(ref self: ContractState, generation_id: u256) {
+            assert(true == false, 'Now locked');
             assert(
                 generation_id <= self.current_character_id() && generation_id > 0,
                 Errors::INVALID_GENERATION_ID
@@ -233,6 +244,26 @@ mod GenesisGalleria {
             let mut uri: felt252 = self.generation_id_to_generation.read(generation_id).uri;
             self.erc721._set_token_uri(generation_id, uri);
             self.emit(PublishGeneration { generation_id: generation_id, to: get_caller_address() });
+        }
+
+        fn publish_genesis(ref self: ContractState, uri: felt252) {
+            assert(!uri.is_zero(), Errors::INVALID_URI);
+            let genesis_id_old = self.genesis_id.read();
+            self.genesis_id.write(genesis_id_old + 1);
+            let genesis_id_new = self.genesis_id.read();
+            self.erc721._mint(get_caller_address(), genesis_id_new);
+            self.erc721._set_token_uri(genesis_id_new, uri);
+            self
+                .genesis_id_to_genesis
+                .write(
+                    genesis_id_new,
+                    Genesis {
+                        genesis_id: genesis_id_new,
+                        minter: get_caller_address(),
+                        timestamp: starknet::get_block_timestamp(),
+                        uri: uri,
+                    }
+                );
         }
 
         fn get_user_characters(
@@ -277,6 +308,21 @@ mod GenesisGalleria {
                 i += 1;
             };
             return generations;
+        }
+
+        fn get_all_genesis(self: @ContractState) -> Array<Genesis> {
+            let mut all_genesis = ArrayTrait::<Genesis>::new();
+            let mut len: u256 = self.genesis_id.read();
+            let mut i: u256 = 1;
+            loop {
+                if (i > len) {
+                    break;
+                }
+                let mut genesis: Genesis = self.genesis_id_to_genesis.read(i);
+                all_genesis.append(genesis);
+                i += 1;
+            };
+            return all_genesis;
         }
 
         fn current_character_id(self: @ContractState) -> u256 {
