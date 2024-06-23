@@ -2,7 +2,7 @@ import axios from "axios";
 import { Lightbulb, Loader } from "lucide-react";
 import { Recursive } from "next/font/google";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const font = Recursive({ subsets: ["latin"] });
 
@@ -15,6 +15,10 @@ import {
 import { cn } from "@/lib/utils";
 import { getRandomPrompt } from "../utils/index";
 import { Button } from "./ui/button";
+import { getAllGenesis, getGenesis } from "@/blockchain/scripts/history";
+import useMintNft from "@/blockchain/scripts/mintNft";
+import { useDynamicContext, useIsLoggedIn, } from "@dynamic-labs/sdk-react-core";
+import { useAccount } from "@starknet-react/core";
 
 export default function PromptForm({}: any) {
   const [prompt, setPrompt] = useState("");
@@ -25,10 +29,32 @@ export default function PromptForm({}: any) {
   const [generatedImageUrl, setGeneratedImageUrl] = useState(
     // ""
     // "https://shorturl.at/Dvlqm"
-    "https://oaidalleapiprodscus.blob.core.windows.net/private/org-CF0C6y3lv4lQ8ilB5bQ9SAna/user-C41QIYbDmRAXSSXjMq9xyjUJ/img-5ERbwKYIQU8FdpcBIuZBtBiP.png?st=2024-06-23T02:46:36Z&se=2024-06-23T04:46:36Z&sp=r&sv=2023-11-03&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-06-22T23:04:49Z&ske=2024-06-23T23:04:49Z&sks=b&skv=2023-11-03&sig=Dr6O1BbLlhOqlmxeBJ37NcEFXHpwG1MlNdvSqMSkNBU%3D"
+    "https://oaidalleapiprodscus.blob.core.windows.net/private/org-CF0C6y3lv4lQ8ilB5bQ9SAna/user-C41QIYbDmRAXSSXjMq9xyjUJ/img-qqwIlXOGlShZxcNIYu5Xre4q.png?st=2024-06-23T08%3A24%3A35Z&se=2024-06-23T10%3A24%3A35Z&sp=r&sv=2023-11-03&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-06-22T13%3A51%3A55Z&ske=2024-06-23T13%3A51%3A55Z&sks=b&skv=2023-11-03&sig=RClvaHxS8DuAmQFCGOKQL5fGsuF%2BmH0Agh3oo3eEnfQ%3D"
     // "https://oaidalleapiprodscus.blob.core.windows.net/private/org-CF0C6y3lv4lQ8ilB5bQ9SAna/user-C41QIYbDmRAXSSXjMq9xyjUJ/img-tJPa6t6Cbp4N5cADLqbYeGI3.png?st=2024-06-23T02%3A55%3A38Z&se=2024-06-23T04%3A55%3A38Z&sp=r&sv=2023-11-03&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-06-22T14%3A08%3A33Z&ske=2024-06-23T14%3A08%3A33Z&sks=b&skv=2023-11-03&sig=3dxSdAs6Ow1YjDQkf2YSZfSuDYwJRHNmSTPD5esnoEM%3D"
   );
+  const {
+    uri,
+    seturi,
+    dataMint,
+    errorMint,
+    resetMint,
+    writeAsyncMint,
+    writeMint,
+    isErrorMint,
+    isIdleMint,
+    isSuccessMint,
+    statusMint
+  }=useMintNft()
 
+  const handleMint=async()=>{
+    try{
+      const data=await getGenesis();
+      console.log(data,"data")
+    }catch(err){
+      console.log(err,'err in trnasaction')
+    }
+  }
+  const { primaryWallet } = useDynamicContext();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setIsGenerating(true);
@@ -85,7 +111,11 @@ export default function PromptForm({}: any) {
         }
       );
       const uploadRes = await upload.json();
-      setIpfsHash(uploadRes.IpfsHash);
+      if(uploadRes?.IpfsHash){
+        setIpfsHash(uploadRes?.IpfsHash);
+        seturi(uploadRes?.IpfsHash)
+        handleMint()
+      }
       setIsMinting(false);
       console.log(uploadRes, "uploadRes");
     } catch (error) {
@@ -93,6 +123,14 @@ export default function PromptForm({}: any) {
       setIsMinting(false);
     }
   }
+
+  useEffect(()=>{
+    const fetchData=async()=>{
+      const res=await getAllGenesis();
+      console.log(res,"values for all genesis")
+    }
+    fetchData();
+  },[])
 
   return (
     <form onSubmit={handleSubmit} className="animate-in fade-in duration-700">
@@ -114,7 +152,7 @@ export default function PromptForm({}: any) {
         </button>
 
         <Dialog
-          open={isModalOpen}
+          open={true}
           onOpenChange={(isOpen) => {
             !isGenerating && !isMinting && setIsModalOpen(isOpen);
           }}
@@ -142,7 +180,10 @@ export default function PromptForm({}: any) {
                       <div className="w-full flex gap-2 mt-5">
                         <Button
                           variant="ghost"
-                          onClick={() => setIsModalOpen(false)}
+                          onClick={() => {
+                            // setIsModalOpen(false)
+                            handleMint()
+                          }}
                           className={cn("w-full", {
                             "opacity-50 cursor-not-allowed": isMinting,
                           })}
