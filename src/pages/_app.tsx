@@ -14,6 +14,8 @@ import {
 } from "@starknet-react/core";
 import type { AppProps } from "next/app";
 
+import { Toaster } from "@/components/ui/sonner";
+
 export default function App({ Component, pageProps }: AppProps) {
   const cssOverrides = `
     .dynamic-widget-inline-controls {
@@ -44,6 +46,7 @@ export default function App({ Component, pageProps }: AppProps) {
         connectors={connectors}
       >
         <Component {...pageProps} />
+        <Toaster />
       </StarknetConfig>
     </DynamicContextProvider>
   );

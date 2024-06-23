@@ -60,7 +60,7 @@ export default function Header() {
           </DropdownMenuContent>
         ) : (
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => disconnect()}>
+            <DropdownMenuItem onClick={() => disconnect()} className="text-xs">
               Disconnect
             </DropdownMenuItem>
           </DropdownMenuContent>

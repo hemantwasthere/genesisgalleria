@@ -1,10 +1,11 @@
+import { useDynamicContext, useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
+import { useAccount } from "@starknet-react/core";
 import axios from "axios";
 import { Lightbulb, Loader } from "lucide-react";
 import { Recursive } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
-const font = Recursive({ subsets: ["latin"] });
+import { toast } from "sonner";
 
 import { getAllGenesis, getGenesis } from "@/blockchain/scripts/history";
 import useMintNft from "@/blockchain/scripts/mintNft";
@@ -15,10 +16,10 @@ import {
   DialogHeader,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { useDynamicContext, useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
-import { useAccount } from "@starknet-react/core";
 import { getRandomPrompt } from "../utils/index";
 import { Button } from "./ui/button";
+
+const font = Recursive({ subsets: ["latin"] });
 
 export default function PromptForm({}: any) {
   const [prompt, setPrompt] = useState("");
@@ -27,9 +28,9 @@ export default function PromptForm({}: any) {
   const [ipfsHash, setIpfsHash] = useState("");
   const [isMinting, setIsMinting] = useState(false);
   const [generatedImageUrl, setGeneratedImageUrl] = useState(
-    // ""
+    ""
     // "https://shorturl.at/Dvlqm"
-    "https://oaidalleapiprodscus.blob.core.windows.net/private/org-CF0C6y3lv4lQ8ilB5bQ9SAna/user-C41QIYbDmRAXSSXjMq9xyjUJ/img-qqwIlXOGlShZxcNIYu5Xre4q.png?st=2024-06-23T08%3A24%3A35Z&se=2024-06-23T10%3A24%3A35Z&sp=r&sv=2023-11-03&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-06-22T13%3A51%3A55Z&ske=2024-06-23T13%3A51%3A55Z&sks=b&skv=2023-11-03&sig=RClvaHxS8DuAmQFCGOKQL5fGsuF%2BmH0Agh3oo3eEnfQ%3D"
+    // "https://oaidalleapiprodscus.blob.core.windows.net/private/org-CF0C6y3lv4lQ8ilB5bQ9SAna/user-C41QIYbDmRAXSSXjMq9xyjUJ/img-qqwIlXOGlShZxcNIYu5Xre4q.png?st=2024-06-23T08%3A24%3A35Z&se=2024-06-23T10%3A24%3A35Z&sp=r&sv=2023-11-03&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-06-22T13%3A51%3A55Z&ske=2024-06-23T13%3A51%3A55Z&sks=b&skv=2023-11-03&sig=RClvaHxS8DuAmQFCGOKQL5fGsuF%2BmH0Agh3oo3eEnfQ%3D"
     // "https://oaidalleapiprodscus.blob.core.windows.net/private/org-CF0C6y3lv4lQ8ilB5bQ9SAna/user-C41QIYbDmRAXSSXjMq9xyjUJ/img-tJPa6t6Cbp4N5cADLqbYeGI3.png?st=2024-06-23T02%3A55%3A38Z&se=2024-06-23T04%3A55%3A38Z&sp=r&sv=2023-11-03&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-06-22T14%3A08%3A33Z&ske=2024-06-23T14%3A08%3A33Z&sks=b&skv=2023-11-03&sig=3dxSdAs6Ow1YjDQkf2YSZfSuDYwJRHNmSTPD5esnoEM%3D"
   );
   const {
@@ -45,6 +46,10 @@ export default function PromptForm({}: any) {
     isSuccessMint,
     statusMint,
   } = useMintNft();
+  const { primaryWallet } = useDynamicContext();
+  const { status } = useAccount();
+
+  const JWT = process.env.NEXT_PUBLIC_PINATA_JWT!;
 
   const handleMint = async () => {
     try {
@@ -54,9 +59,16 @@ export default function PromptForm({}: any) {
       console.log(err, "err in trnasaction");
     }
   };
-  const { primaryWallet } = useDynamicContext();
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
+    if (status !== "connected")
+      return toast.error("Please connect your wallet first");
+
+    if (!prompt)
+      return toast.error("Please enter a prompt or get surprised : )");
+
     setIsGenerating(true);
     setIsModalOpen(true);
 
@@ -66,12 +78,15 @@ export default function PromptForm({}: any) {
       if (response?.status === 200) {
         setGeneratedImageUrl(response?.data?.imageData[0]?.url);
         setIsGenerating(false);
+        toast.success("Image generated successfully");
       } else {
         setGeneratedImageUrl("");
         setIsGenerating(false);
+        toast.error("Failed to generate image");
       }
       console.log(response?.data?.imageData[0]?.url);
     } catch (error) {
+      toast.error("Failed to generate image");
       console.error(error);
     } finally {
       setIsGenerating(false);
@@ -83,13 +98,11 @@ export default function PromptForm({}: any) {
     setPrompt(randomPrompt);
   };
 
-  const JWT = process.env.NEXT_PUBLIC_PINATA_JWT!;
-
-  async function uploadByURL(url: string) {
+  const uploadByURL = async (url: string) => {
     try {
       setIsMinting(true);
 
-      const blob = new Blob([generatedImageUrl], {
+      const blob = new Blob([url], {
         type: "text/plain",
       });
 
@@ -122,7 +135,7 @@ export default function PromptForm({}: any) {
       console.log(error);
       setIsMinting(false);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
