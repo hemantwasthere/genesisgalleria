@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Lightbulb, Loader } from "lucide-react";
 import { Recursive } from "next/font/google";
+import Image from "next/image";
 import { useState } from "react";
 
 const font = Recursive({ subsets: ["latin"] });
@@ -11,7 +12,6 @@ import {
   DialogDescription,
   DialogHeader,
 } from "@/components/ui/dialog";
-import Image from "next/image";
 import { getRandomPrompt } from "../utils/index";
 import { Button } from "./ui/button";
 
