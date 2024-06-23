@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+
+
 ## Getting Started
 
 First, run the development server:
@@ -38,3 +40,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+## Description of the project:
+Our innovative platform leverages the power of Next.js and Tailwind CSS to offer a seamless user experience for generating and minting custom NFTs. Utilizing OpenAI's latest model, users can input their unique prompts to create high-quality, precise images. These images can then be minted as NFTs with ease, thanks to our integration with Starknet L2 and Dynamic for wallet connectivity. By paying a nominal fee of 4 STRK per NFT, users can secure their custom digital assets on the blockchain, ensuring ownership and provenance. Our system ensures a smooth and efficient process, allowing users to engage with cutting-edge AI technology and blockchain in one unified platform.
