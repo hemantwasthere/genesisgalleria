@@ -1,4 +1,5 @@
 import { Recursive } from "next/font/google";
+import Head from "next/head";
 
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
@@ -8,29 +9,41 @@ const font = Recursive({ subsets: ["latin"] });
 
 export default function Page() {
   return (
-    <div className={font.className}>
-      <BlurElementTop />
-      <BlurElementBottom />
+    <>
+      <Head>
+        <title>Generate and Mint NFTs</title>
+        <meta
+          name="description"
+          content="Mint what you desire - from cats, to rockets, to your favorite actors. Make your creativity a part of this world, forever."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-      <Header />
+      <div className={font.className}>
+        <BlurElementTop />
+        <BlurElementBottom />
 
-      <div className="flex flex-col justify-center items-center h-[calc(100vh-40px)]">
-        <h1 className="text-3xl md:text-6xl lg:text-7xl lg:mt-0 p-4 font-bold text-gray-800 text-center select-none">
-          What&apos;s on your mind?
-        </h1>
-        <div className="flex flex-col mt-2">
-          <PromptForm />
+        <Header />
+
+        <div className="flex flex-col justify-center items-center h-[calc(100vh-40px)]">
+          <h1 className="text-3xl md:text-6xl lg:text-7xl lg:mt-0 p-4 font-bold text-gray-800 text-center select-none">
+            What&apos;s on your mind?
+          </h1>
+          <div className="flex flex-col mt-2">
+            <PromptForm />
+          </div>
         </div>
-      </div>
 
-      <div className="max-w-[512px] mx-auto relative rounded-3xl">
-        <div className="bg-transparent max-h-[512px] lg:max-h-[512px] md:max-h-[512px] w-full flex flex-col items-stretch rounded-lg border-gray-600">
-          <div className="hidden lg:flex md:flex">
-            <Footer />
+        <div className="max-w-[512px] mx-auto relative rounded-3xl">
+          <div className="bg-transparent max-h-[512px] lg:max-h-[512px] md:max-h-[512px] w-full flex flex-col items-stretch rounded-lg border-gray-600">
+            <div className="hidden lg:flex md:flex">
+              <Footer />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
