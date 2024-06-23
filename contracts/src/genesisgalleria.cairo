@@ -130,13 +130,12 @@ mod GenesisGalleria {
 
     #[constructor]
     fn constructor(
-        ref self: ContractState, admin: ContractAddress, name: felt252, symbol: felt252
-    ) {
+        ref self: ContractState, admin: ContractAddress) {
         assert(!admin.is_zero(), Errors::ZERO_ADDRESS);
         self.accesscontrol.initializer();
         self._set_admin(admin);
         self.accesscontrol._grant_role('DEFAULT_ADMIN_ROLE', admin);
-        self.erc721.initializer(name, symbol);
+        self.erc721.initializer('Genesis', 'GNS');
     }
 
 

@@ -12,3 +12,4 @@ starknet = ">=2.4.3"
 
 [[target.starknet-contract]]
 sierra = true
+casm = true
