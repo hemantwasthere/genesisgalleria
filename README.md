@@ -1,6 +1,21 @@
+# Genesis-Galleria
+
+## Genesis Galleria: Where AI Meets Art
+
+**Welcome to Genesis Galleria, a revolutionary platform where you can unleash your creativity and mint unique NFTs using the power of AI image generation!**
+
+**Project Overview**
+
+Genesis Galleria empowers you to become a co-creator alongside cutting-edge AI technology. Simply provide a text prompt describing your desired artwork, and our AI will craft a stunning, one-of-a-kind image. You can then mint this AI-generated masterpiece as an NFT, securing its ownership and value on the blockchain.
+
+**Key Features**
+
+- **Intuitive Prompt Creation:** Craft detailed or evocative text prompts to guide the AI towards your artistic vision.
+- **AI-Powered Image Generation:** Witness the magic of AI as it transforms your prompts into captivating visuals.
+- **NFT Minting:** Secure ownership of your AI-generated artwork on the blockchain by minting it as an NFT.
+- **Genesis Galleria Collection:** Be a part of the inaugural collection, leaving your mark on the history of AI-powered art.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-
 
 ## Getting Started
 
@@ -41,6 +56,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-
 ## Description of the project:
+
 Our innovative platform leverages the power of Next.js and Tailwind CSS to offer a seamless user experience for generating and minting custom NFTs. Utilizing OpenAI's latest model, users can input their unique prompts to create high-quality, precise images. These images can then be minted as NFTs with ease, thanks to our integration with Starknet L2 and Dynamic for wallet connectivity. By paying a nominal fee of 4 STRK per NFT, users can secure their custom digital assets on the blockchain, ensuring ownership and provenance. Our system ensures a smooth and efficient process, allowing users to engage with cutting-edge AI technology and blockchain in one unified platform.
+
