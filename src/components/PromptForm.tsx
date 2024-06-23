@@ -54,7 +54,6 @@ export default function PromptForm({}: any) {
   const handleMint = async () => {
     try {
       const data = await getGenesis();
-      console.log(data, "data");
     } catch (err) {
       console.log(err, "err in trnasaction");
     }
@@ -84,7 +83,6 @@ export default function PromptForm({}: any) {
         setIsGenerating(false);
         toast.error("Failed to generate image");
       }
-      console.log(response?.data?.imageData[0]?.url);
     } catch (error) {
       toast.error("Failed to generate image");
       console.error(error);
@@ -130,7 +128,6 @@ export default function PromptForm({}: any) {
         handleMint();
       }
       setIsMinting(false);
-      console.log(uploadRes, "uploadRes");
     } catch (error) {
       console.log(error);
       setIsMinting(false);
@@ -140,7 +137,6 @@ export default function PromptForm({}: any) {
   useEffect(() => {
     const fetchData = async () => {
       const res = await getAllGenesis();
-      console.log(res, "values for all genesis");
     };
     fetchData();
   }, []);
