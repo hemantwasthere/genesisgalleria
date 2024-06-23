@@ -19,7 +19,13 @@ export default function PromptForm({}: any) {
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [generatedImageUrl, setGeneratedImageUrl] = useState("");
+  const [ipfsHash, setIpfsHash] = useState("");
+  const [generatedImageUrl, setGeneratedImageUrl] = useState(
+    // ""
+    // "https://shorturl.at/Dvlqm"
+    "https://oaidalleapiprodscus.blob.core.windows.net/private/org-CF0C6y3lv4lQ8ilB5bQ9SAna/user-C41QIYbDmRAXSSXjMq9xyjUJ/img-5ERbwKYIQU8FdpcBIuZBtBiP.png?st=2024-06-23T02:46:36Z&se=2024-06-23T04:46:36Z&sp=r&sv=2023-11-03&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-06-22T23:04:49Z&ske=2024-06-23T23:04:49Z&sks=b&skv=2023-11-03&sig=Dr6O1BbLlhOqlmxeBJ37NcEFXHpwG1MlNdvSqMSkNBU%3D"
+    // "https://oaidalleapiprodscus.blob.core.windows.net/private/org-CF0C6y3lv4lQ8ilB5bQ9SAna/user-C41QIYbDmRAXSSXjMq9xyjUJ/img-tJPa6t6Cbp4N5cADLqbYeGI3.png?st=2024-06-23T02%3A55%3A38Z&se=2024-06-23T04%3A55%3A38Z&sp=r&sv=2023-11-03&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-06-22T14%3A08%3A33Z&ske=2024-06-23T14%3A08%3A33Z&sks=b&skv=2023-11-03&sig=3dxSdAs6Ow1YjDQkf2YSZfSuDYwJRHNmSTPD5esnoEM%3D"
+  );
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -49,6 +55,39 @@ export default function PromptForm({}: any) {
     setPrompt(randomPrompt);
   };
 
+  const JWT = process.env.NEXT_PUBLIC_PINATA_JWT!;
+
+  async function uploadByURL(url: string) {
+    try {
+      const blob = new Blob([generatedImageUrl], {
+        type: "text/plain",
+      });
+
+      const file = new File([blob], "file");
+
+      const data = new FormData();
+      data.append("file", file);
+
+      const upload = await fetch(
+        "https://api.pinata.cloud/pinning/pinFileToIPFS",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${JWT}`,
+            Accept: "text/plain",
+            "Allow-Access-Control-Origin": "*",
+          },
+          body: data,
+        }
+      );
+      const uploadRes = await upload.json();
+      setIpfsHash(uploadRes.IpfsHash);
+      console.log(uploadRes, "uploadRes");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit} className="animate-in fade-in duration-700">
       <div className="flex flex-col gap-2 sm:gap-0 sm:flex-row justify-center items-center p-2">
@@ -68,7 +107,7 @@ export default function PromptForm({}: any) {
           Generate
         </button>
 
-        <Dialog
+        {/* <Dialog
           open={isModalOpen}
           onOpenChange={(isOpen) => {
             !isGenerating && setIsModalOpen(isOpen);
@@ -102,13 +141,55 @@ export default function PromptForm({}: any) {
                         >
                           Continue
                         </Button>
-                        <Button className="w-full bg-gradient-to-tr from-[#e79de7] to-[#f28df2] text-black hover:to-[#ee77ee]">
+                        <Button
+                          onClick={async () => {
+                            generatedImageUrl && uploadByURL(generatedImageUrl);
+                          }}
+                          className="w-full bg-gradient-to-tr from-[#e79de7] to-[#f28df2] text-black hover:to-[#ee77ee]"
+                        >
                           Mint NFT
                         </Button>
                       </div>
                     </div>
                   </>
                 )}
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog> */}
+
+        <Dialog open={true}>
+          <DialogContent hideCloseIcon className={font.className}>
+            <DialogHeader>
+              <DialogDescription className="flex justify-center items-center">
+                <>
+                  <div className="flex flex-col items-center">
+                    <Image
+                      src={"/vercel.svg"}
+                      width={500}
+                      height={500}
+                      alt="generated image"
+                    />
+
+                    <div className="w-full flex gap-2 mt-5">
+                      <Button
+                        variant="ghost"
+                        onClick={() => setIsModalOpen(false)}
+                        className="w-full "
+                      >
+                        Continue
+                      </Button>
+                      <Button
+                        onClick={async () => {
+                          uploadByURL(generatedImageUrl);
+                        }}
+                        className="w-full bg-gradient-to-tr from-[#e79de7] to-[#f28df2] text-black hover:to-[#ee77ee]"
+                      >
+                        Mint NFT
+                      </Button>
+                    </div>
+                  </div>
+                </>
               </DialogDescription>
             </DialogHeader>
           </DialogContent>
